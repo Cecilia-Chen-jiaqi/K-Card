@@ -10,6 +10,10 @@ spring:
   jackson:
     serialization:
       indent_output: true
+  resources:
+    static-locations: file:D:/upload/,classpath:/static/
+  mvc:
+    static-path-pattern: /upload/**
 
 jwt:
   secret: abc123456abc123456abc123456abc123456

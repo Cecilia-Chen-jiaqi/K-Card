@@ -27,10 +27,27 @@ public class CartController {
 
     @PostMapping("/add")
     public R<Cart> add(@RequestBody Cart cart) {
-        cart.setUserId(LoginUserHolder.getUserId());
-        if (cart.getQuantity() == null || cart.getQuantity() <= 0) {
-            cart.setQuantity(1);
+        Long userId = LoginUserHolder.getUserId();
+        if (userId == null) {
+            return R.error("请先登录");
         }
+        if (cart.getGoodsId() == null) {
+            return R.error("商品ID不能为空");
+        }
+        Goods goods = goodsService.getByIdIncludeAll(cart.getGoodsId());
+        if (goods == null || goods.getStatus() == null || goods.getStatus() != 1) {
+            return R.error("商品不存在或已下架");
+        }
+        Integer quantity = cart.getQuantity();
+        if (quantity == null || quantity <= 0) {
+            quantity = 1;
+        }
+        if (goods.getStock() == null || goods.getStock() < quantity) {
+            return R.error("库存不足");
+        }
+        cart.setUserId(userId);
+        cart.setQuantity(quantity);
+        cart.setSelected(1);
         return R.ok(cartService.addToCart(cart));
     }
 

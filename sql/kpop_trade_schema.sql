@@ -1,16 +1,18 @@
 -- MySQL 5.7 compatible DDL for K-CARD KPOP小卡交易平台
 -- 数据库名：kpop_trade
 
+DROP DATABASE IF EXISTS `kpop_trade`;
 CREATE DATABASE IF NOT EXISTS `kpop_trade` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `kpop_trade`;
 
 -- 用户表
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `username` VARCHAR(64) NOT NULL COMMENT '登录用户名',
   `password` VARCHAR(128) NOT NULL COMMENT '密码（已加密）',
   `nickname` VARCHAR(64) DEFAULT NULL COMMENT '昵称',
-  `phone` VARCHAR(32) DEFAULT NULL COMMENT '手机号',
+  `phone` VARCHAR(32) NOT NULL COMMENT '手机号',
   `email` VARCHAR(128) DEFAULT NULL COMMENT '邮箱',
   `avatar` VARCHAR(255) DEFAULT NULL COMMENT '头像地址',
   `campus` VARCHAR(128) DEFAULT NULL COMMENT '校园',
@@ -19,10 +21,12 @@ CREATE TABLE IF NOT EXISTS `user` (
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_username` (`username`)
+  UNIQUE KEY `uk_user_username` (`username`),
+  UNIQUE KEY `uk_user_phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='用户表';
 
 -- 地址表
+DROP TABLE IF EXISTS `address`;
 CREATE TABLE IF NOT EXISTS `address` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '地址ID',
   `user_id` BIGINT(20) NOT NULL COMMENT '所属用户',
@@ -40,6 +44,7 @@ CREATE TABLE IF NOT EXISTS `address` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='地址表';
 
 -- 商品表
+DROP TABLE IF EXISTS `goods`;
 CREATE TABLE IF NOT EXISTS `goods` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '商品ID',
   `seller_id` BIGINT(20) NOT NULL COMMENT '卖家用户ID',
@@ -65,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `goods` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='商品表';
 
 -- KPOP 商品详情表
+DROP TABLE IF EXISTS `kpop_goods_detail`;
 CREATE TABLE IF NOT EXISTS `kpop_goods_detail` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '详情ID',
   `goods_id` BIGINT(20) NOT NULL COMMENT '商品ID',
@@ -78,6 +84,7 @@ CREATE TABLE IF NOT EXISTS `kpop_goods_detail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='KPOP商品详情';
 
 -- 购物车表
+DROP TABLE IF EXISTS `cart`;
 CREATE TABLE IF NOT EXISTS `cart` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '购物车记录ID',
   `user_id` BIGINT(20) NOT NULL COMMENT '用户ID',
@@ -92,6 +99,7 @@ CREATE TABLE IF NOT EXISTS `cart` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='购物车表';
 
 -- 订单表
+DROP TABLE IF EXISTS `orders`;
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '订单ID',
   `order_no` VARCHAR(64) NOT NULL COMMENT '订单号',
@@ -114,6 +122,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='订单表';
 
 -- 支付流水表
+DROP TABLE IF EXISTS `payment_log`;
 CREATE TABLE IF NOT EXISTS `payment_log` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '支付日志ID',
   `order_no` VARCHAR(64) NOT NULL COMMENT '订单号',
@@ -128,6 +137,7 @@ CREATE TABLE IF NOT EXISTS `payment_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='支付流水表';
 
 -- 退款流水表
+DROP TABLE IF EXISTS `refund_log`;
 CREATE TABLE IF NOT EXISTS `refund_log` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '退款日志ID',
   `order_no` VARCHAR(64) NOT NULL COMMENT '订单号',

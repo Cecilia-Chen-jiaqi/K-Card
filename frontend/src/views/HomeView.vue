@@ -1,45 +1,165 @@
 <template>
-  <el-container>
-    <el-header>
-      <el-input v-model="search" placeholder="搜索团体/爱豆/品相" clearable />
-    </el-header>
-    <el-main>
-      <el-row :gutter="20">
-        <el-col :span="6"><el-card><router-link to="/campus">校园同城专区</router-link></el-card></el-col>
-        <el-col :span="6"><el-card><router-link to="/exchange">换卡专区</router-link></el-card></el-col>
-        <el-col :span="6"><el-card><router-link to="/publish">发布商品</router-link></el-card></el-col>
-      </el-row>
-      <el-row :gutter="20" style="margin-top: 20px;">
-        <el-col v-for="item in goodsList" :key="item.id" :span="6">
-          <el-card>
-            <img :src="item.coverImage || 'https://via.placeholder.com/200'" style="width: 100%; height: 150px; object-fit: cover;" />
-            <h3>{{ item.title }}</h3>
-            <div>{{ item.groupName }} / {{ item.idolName }}</div>
-            <div>{{ item.quality }} / {{ item.tradeType }}</div>
-            <div>¥{{ item.price }}</div>
-            <el-button type="primary" @click="goDetail(item.id)">查看</el-button>
-          </el-card>
-        </el-col>
-      </el-row>
-    </el-main>
-  </el-container>
+  <div class="home-page">
+    <section class="hero-card">
+      <div>
+        <h1>欢迎来到 K-CARD 小卡交易站</h1>
+        <p>可爱风格、轻松买卖，让你的偶像小卡闪闪发光。</p>
+      </div>
+      <div class="hero-actions">
+        <el-button type="primary" size="large" @click="$router.push('/publish')">发布你的第一张小卡</el-button>
+        <el-button type="success" size="large" @click="$router.push('/cart')">查看购物车</el-button>
+      </div>
+    </section>
+
+    <div class="goods-grid">
+      <el-card v-for="item in goodsList" :key="item.id" class="goods-card">
+        <el-image
+          :src="item.coverImage || placeholderImage"
+          fit="cover"
+          class="goods-image"
+        >
+          <template #error>
+            <div class="empty-img">暂无图片</div>
+          </template>
+        </el-image>
+        <div class="goods-info">
+          <div class="goods-title">{{ item.title }}</div>
+          <div class="goods-meta">{{ item.groupName }} · {{ item.idolName }}</div>
+          <div class="goods-tags">
+            <el-tag size="small">{{ item.quality }}</el-tag>
+            <el-tag size="small" type="info">{{ item.tradeType }}</el-tag>
+          </div>
+          <div class="goods-price">¥{{ item.price }}</div>
+          <el-button type="primary" round @click="goDetail(item.id)">立即查看</el-button>
+        </div>
+      </el-card>
+    </div>
+
+    <div v-if="goodsList.length === 0" class="empty-state">
+      <h3>当前暂无上架商品</h3>
+      <p>如果你有可爱的偶像小卡，快来发布吧！</p>
+      <el-button type="primary" @click="$router.push('/publish')">去发布小卡</el-button>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
-const search = ref('');
+const router = useRouter();
 const goodsList = ref([]);
+const placeholderImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23fff0f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23f06292' font-size='18'%3E暂无图片%3C/text%3E%3C/svg%3E";
 
 const loadGoods = async () => {
-  const res = await axios.get('/api/goods/list');
-  goodsList.value = res.data.data || [];
+  try {
+    const res = await axios.get('/api/goods/list');
+    goodsList.value = res.data.data || [];
+  } catch (error) {
+    goodsList.value = [];
+    console.error('加载商品列表失败', error);
+  }
 };
 
 const goDetail = (id) => {
-  window.location.href = `/goods/${id}`;
+  if (!id) {
+    console.warn('商品ID为空，无法跳转详情');
+    return;
+  }
+  router.push({ path: '/goods/detail', query: { id } });
 };
 
 onMounted(loadGoods);
 </script>
+
+<style scoped>
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero-card {
+  padding: 28px 32px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #ffeff7 0%, #fff6f9 100%);
+  box-shadow: 0 20px 40px rgba(242, 150, 180, 0.14);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.hero-card h1 {
+  margin: 0 0 10px;
+  font-size: 32px;
+  color: #d81b60;
+}
+
+.hero-card p {
+  margin: 0;
+  color: #636266;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.goods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.goods-card {
+  border-radius: 24px;
+  padding: 16px;
+  background: linear-gradient(180deg, #fff3f8 0%, #ffffff 100%);
+  box-shadow: 0 14px 30px rgba(240, 165, 196, 0.12);
+}
+
+.goods-image {
+  width: 100%;
+  min-height: 150px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #fff0f6;
+}
+
+.goods-info {
+  margin-top: 14px;
+}
+
+.goods-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.goods-meta {
+  color: #909399;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.goods-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.goods-price {
+  font-size: 20px;
+  color: #ff4d73;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 0;
+  color: #909399;
+}
+</style>

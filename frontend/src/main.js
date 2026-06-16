@@ -17,10 +17,11 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    const status = error.response?.status;
+    if (status === 401) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('currentUser');
-      window.location.href = '/login';
+      router.push('/login');
     }
     return Promise.reject(error);
   }

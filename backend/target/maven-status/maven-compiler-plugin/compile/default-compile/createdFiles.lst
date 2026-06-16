@@ -2,14 +2,18 @@ com\kpoptrade\entity\User.class
 com\kpoptrade\config\SchedulerConfig.class
 com\kpoptrade\service\log\PaymentLogServiceImpl.class
 com\kpoptrade\util\LoginUserHolder.class
+com\kpoptrade\config\DatabaseInitializer.class
 com\kpoptrade\controller\FileUploadController.class
 com\kpoptrade\mapper\KpopGoodsDetailMapper.class
 com\kpoptrade\util\JwtUtil.class
+com\kpoptrade\dto\OrderDetailDto.class
 com\kpoptrade\service\log\RefundLogServiceImpl.class
 com\kpoptrade\service\log\RefundLogService.class
+com\kpoptrade\service\impl\KpopGoodsDetailServiceImpl.class
 com\kpoptrade\service\OrdersService.class
 com\kpoptrade\service\CartService.class
 com\kpoptrade\interceptor\JwtAuthInterceptor.class
+com\kpoptrade\dto\GoodsCreateDto.class
 com\kpoptrade\service\log\PaymentLogService.class
 com\kpoptrade\controller\AuthController.class
 com\kpoptrade\entity\KpopGoodsDetail.class
@@ -19,6 +23,8 @@ com\kpoptrade\entity\Cart.class
 com\kpoptrade\entity\CartItemVo.class
 com\kpoptrade\entity\RefundLog.class
 com\kpoptrade\entity\Orders.class
+com\kpoptrade\constant\OrderStatus.class
+com\kpoptrade\dto\GoodsDetailDto.class
 com\kpoptrade\util\R.class
 com\kpoptrade\util\AlipayUtil$2.class
 com\kpoptrade\config\WebConfig.class
@@ -30,6 +36,7 @@ com\kpoptrade\config\AuthConfig.class
 com\kpoptrade\controller\GoodsController.class
 com\kpoptrade\controller\PaymentController.class
 com\kpoptrade\controller\CartController.class
+com\kpoptrade\dto\OrderItemDto.class
 com\kpoptrade\mapper\PaymentLogMapper.class
 com\kpoptrade\controller\OrdersController.class
 com\kpoptrade\service\GoodsService.class
@@ -45,4 +52,5 @@ com\kpoptrade\entity\Goods.class
 com\kpoptrade\mapper\UserMapper.class
 com\kpoptrade\config\MybatisPlusConfig.class
 com\kpoptrade\mapper\OrdersMapper.class
+com\kpoptrade\service\KpopGoodsDetailService.class
 com\kpoptrade\service\impl\CartServiceImpl.class

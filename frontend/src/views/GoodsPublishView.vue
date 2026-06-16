@@ -1,73 +1,82 @@
 <template>
-  <el-container>
-    <el-main>
-      <h2>发布商品</h2>
-      <el-form :model="form" label-width="120px">
-        <el-form-item label="商品标题">
-          <el-input v-model="form.title" />
-        </el-form-item>
-        <el-form-item label="团体">
-          <el-input v-model="form.groupName" />
-        </el-form-item>
-        <el-form-item label="爱豆">
-          <el-input v-model="form.idolName" />
-        </el-form-item>
-        <el-form-item label="品相">
-          <el-select v-model="form.quality">
-            <el-option label="无暇" value="无暇" />
-            <el-option label="微瑕" value="微瑕" />
-            <el-option label="重瑕" value="重瑕" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="交易模式">
-          <el-select v-model="form.tradeType">
-            <el-option label="仅出售" value="仅出售" />
-            <el-option label="可交换" value="可交换" />
-            <el-option label="支持预留" value="支持预留" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="价格">
-          <el-input type="number" v-model="form.price" />
-        </el-form-item>
-        <el-form-item label="库存">
-          <el-input type="number" v-model="form.stock" />
-        </el-form-item>
-        <el-form-item label="是否校园面交">
-          <el-switch v-model="form.deliveryMode" active-value="2" inactive-value="1" />
-        </el-form-item>
-        <el-form-item label="描述">
-          <el-input type="textarea" v-model="form.description" />
-        </el-form-item>
-        <el-form-item label="封面图片">
-          <el-upload
-            action="/api/upload/image"
-            :show-file-list="false"
-            :on-success="handleUploadSuccess"
-            :before-upload="beforeUpload"
-            :headers="uploadHeaders"
-            name="file"
-          >
-            <el-button type="primary">上传封面图</el-button>
-          </el-upload>
-          <img
-            v-if="form.coverImage"
-            :src="form.coverImage"
-            style="max-width: 200px; margin-top: 12px;"
-          />
-        </el-form-item>
-        <!-- 删除多余 </el-input> 闭合标签 -->
-        <el-form-item label="瑕疵图地址">
-          <el-input v-model="form.defectImages" placeholder="多张图片用逗号分隔" />
-        </el-form-item>
-        <el-form-item label="捆卡说明">
-          <el-input v-model="form.cardBundle" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submit">发布</el-button>
-        </el-form-item>
-      </el-form>
-    </el-main>
-  </el-container>
+  <div class="page-content publish-page">
+    <h2>发布商品</h2>
+    <el-form :model="form" label-width="120px">
+      <el-form-item label="商品标题">
+        <el-input v-model="form.title" />
+      </el-form-item>
+      <el-form-item label="团体">
+        <el-input v-model="form.groupName" />
+      </el-form-item>
+      <el-form-item label="爱豆">
+        <el-input v-model="form.idolName" />
+      </el-form-item>
+      <el-form-item label="品相">
+        <el-select v-model="form.quality">
+          <el-option label="无暇" value="无暇" />
+          <el-option label="微瑕" value="微瑕" />
+          <el-option label="重瑕" value="重瑕" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="交易模式">
+        <el-select v-model="form.tradeType" @change="handleTradeTypeChange">
+          <el-option label="仅出售" value="仅出售" />
+          <el-option label="可交换" value="可交换" />
+          <el-option label="支持预留" value="支持预留" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="价格">
+        <el-input type="number" v-model.number="form.price" />
+      </el-form-item>
+      <el-form-item label="库存">
+        <el-input type="number" v-model.number="form.stock" />
+      </el-form-item>
+      <el-form-item label="是否校园面交">
+        <el-switch v-model="form.deliveryMode" active-value="2" inactive-value="1" />
+      </el-form-item>
+      <el-form-item label="预留截止日期" v-if="form.tradeType === '支持预留'">
+        <el-date-picker
+          v-model="form.reserveDeadline"
+          type="datetime"
+          placeholder="请选择预留截止时间"
+          format="yyyy-MM-dd HH:mm"
+          value-format="yyyy-MM-dd HH:mm"
+          style="width: 100%"
+        />
+      </el-form-item>
+      <el-form-item label="描述">
+        <el-input type="textarea" v-model="form.description" />
+      </el-form-item>
+      <el-form-item label="封面图片">
+        <el-upload
+          action="/api/upload/image"
+          :show-file-list="false"
+          :on-success="handleUploadSuccess"
+          :before-upload="beforeUpload"
+          :headers="uploadHeaders"
+          name="file"
+        >
+          <el-button type="primary">上传封面图</el-button>
+        </el-upload>
+        <img v-if="form.coverImage" :src="form.coverImage" class="preview-image" />
+      </el-form-item>
+      <el-form-item label="瑕疵图地址">
+        <el-input v-model="form.defectImages" placeholder="多张图片用逗号分隔" />
+      </el-form-item>
+      <el-form-item label="捆卡说明">
+        <el-input v-model="form.cardBundle" />
+      </el-form-item>
+      <el-form-item label="换卡说明">
+        <el-input v-model="form.exchangeInfo" />
+      </el-form-item>
+      <el-form-item label="补充说明">
+        <el-input type="textarea" v-model="form.extraInfo" />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submit">发布</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script setup>
@@ -86,13 +95,15 @@ const form = reactive({
   quality: '无暇',
   tradeType: '仅出售',
   reserveSupport: 0,
+  reserveDeadline: '',
   deliveryMode: 1,
   coverImage: '',
   defectImages: '',
   cardBundle: '',
+  exchangeInfo: '',
+  extraInfo: '',
 });
 
-// 只保留一次 uploadHeaders，删除下方重复定义
 const uploadHeaders = {
   Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`,
 };
@@ -102,6 +113,15 @@ const handleUploadSuccess = (response) => {
     form.coverImage = response.data;
   } else {
     alert(response.message || '图片上传失败');
+  }
+};
+
+const handleTradeTypeChange = (value) => {
+  if (value === '支持预留') {
+    form.reserveSupport = 1;
+  } else {
+    form.reserveSupport = 0;
+    form.reserveDeadline = '';
   }
 };
 
@@ -120,6 +140,13 @@ const beforeUpload = (file) => {
 };
 
 const submit = async () => {
+  if (!form.title.trim() || !form.groupName.trim() || !form.idolName.trim() || !form.price || !form.stock) {
+    return alert('请填写完整商品信息');
+  }
+  if (form.tradeType === '支持预留' && !form.reserveDeadline) {
+    return alert('请选择预留截止日期');
+  }
+
   try {
     await axios.post('/api/goods/create', form);
     alert('商品已发布');

@@ -61,4 +61,51 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders> impleme
         order.setUpdatedAt(new Date());
         return updateById(order);
     }
+
+    @Override
+    public List<Orders> listByBuyer(Long buyerId) {
+        return lambdaQuery().eq(Orders::getBuyerId, buyerId).orderByDesc(Orders::getCreatedAt).list();
+    }
+
+    @Override
+    public List<Orders> listBySeller(Long sellerId) {
+        return lambdaQuery().eq(Orders::getSellerId, sellerId).orderByDesc(Orders::getCreatedAt).list();
+    }
+
+    @Override
+    @Transactional
+    public boolean shipOrder(String orderNo) {
+        Orders order = getByOrderNo(orderNo);
+        if (order == null || order.getStatus() != 1) {
+            return false;
+        }
+        order.setStatus(2);
+        order.setUpdatedAt(new Date());
+        return updateById(order);
+    }
+
+    @Override
+    @Transactional
+    public boolean completeOrder(String orderNo) {
+        Orders order = getByOrderNo(orderNo);
+        if (order == null || (order.getStatus() != 2 && order.getStatus() != 1)) {
+            return false;
+        }
+        order.setStatus(3);
+        order.setUpdatedAt(new Date());
+        return updateById(order);
+    }
+
+    @Override
+    @Transactional
+    public boolean cancelOrder(String orderNo) {
+        Orders order = getByOrderNo(orderNo);
+        if (order == null || order.getStatus() != 0) {
+            return false;
+        }
+        order.setStatus(4);
+        order.setClosedAt(new Date());
+        order.setUpdatedAt(new Date());
+        return updateById(order);
+    }
 }

@@ -23,6 +23,11 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
     }
 
     @Override
+    public Goods getByIdIncludeAll(Long id) {
+        return lambdaQuery().eq(Goods::getId, id).one();
+    }
+
+    @Override
     public boolean updateGoods(Goods goods) {
         return updateById(goods);
     }
@@ -37,6 +42,20 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
             return false;
         }
         goods.setStock(goods.getStock() - quantity);
+        return updateById(goods);
+    }
+
+    @Override
+    public boolean increaseStock(Long goodsId, Integer quantity) {
+        if (goodsId == null || quantity == null || quantity <= 0) {
+            return false;
+        }
+        Goods goods = lambdaQuery().eq(Goods::getId, goodsId).one();
+        if (goods == null) {
+            return false;
+        }
+        Integer currentStock = goods.getStock() == null ? 0 : goods.getStock();
+        goods.setStock(currentStock + quantity);
         return updateById(goods);
     }
 

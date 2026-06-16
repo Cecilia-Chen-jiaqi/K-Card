@@ -13,14 +13,15 @@ import RegisterView from '../views/RegisterView.vue';
 
 const routes = [
   { path: '/', component: HomeView },
+  { path: '/goods/detail', component: GoodsDetailView },
   { path: '/goods/:id', component: GoodsDetailView },
   { path: '/cart', component: CartView, meta: { requiresAuth: true } },
   { path: '/checkout/:orderNo', component: OrderCheckoutView, meta: { requiresAuth: true } },
   { path: '/pay-success', component: PaySuccessView },
   { path: '/user', component: UserCenterView, meta: { requiresAuth: true } },
   { path: '/publish', component: GoodsPublishView, meta: { requiresAuth: true } },
-  { path: '/campus', component: CampusZoneView },
-  { path: '/exchange', component: ExchangeZoneView },
+  { path: '/campus', component: CampusZoneView, meta: { requiresAuth: true } },
+  { path: '/exchange', component: ExchangeZoneView, meta: { requiresAuth: true } },
   { path: '/login', component: LoginView },
   { path: '/register', component: RegisterView },
 ];
@@ -33,7 +34,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('authToken');
   if (to.meta.requiresAuth && !token) {
-    return next('/login');
+    return next({ path: '/login', query: { redirect: to.fullPath } });
   }
   if ((to.path === '/login' || to.path === '/register') && token) {
     return next('/');

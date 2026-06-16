@@ -17,11 +17,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public User register(User user) {
-        if (user == null || user.getUsername() == null || user.getPassword() == null) {
+        if (user == null || user.getUsername() == null || user.getPassword() == null || user.getPhone() == null) {
             return null;
         }
-        User existing = lambdaQuery().eq(User::getUsername, user.getUsername()).one();
-        if (existing != null) {
+        User existingByUsername = lambdaQuery().eq(User::getUsername, user.getUsername()).one();
+        if (existingByUsername != null) {
+            return null;
+        }
+        User existingByPhone = lambdaQuery().eq(User::getPhone, user.getPhone()).one();
+        if (existingByPhone != null) {
             return null;
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -36,6 +40,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User findByUsername(String username) {
         return lambdaQuery().eq(User::getUsername, username).one();
+    }
+
+    @Override
+    public User findByPhone(String phone) {
+        return lambdaQuery().eq(User::getPhone, phone).one();
     }
 
     @Override
