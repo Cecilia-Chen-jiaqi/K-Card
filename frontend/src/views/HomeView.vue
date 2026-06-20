@@ -3,25 +3,27 @@
     <section class="hero-card">
       <div>
         <h1>欢迎来到 K-CARD 小卡交易站</h1>
-        <p>可爱风格、轻松买卖，让你的偶像小卡闪闪发光。</p>
+        <p>友善交易、轻松买卖，让你的爱豆小卡闪闪发光。</p>
       </div>
       <div class="hero-actions">
-        <el-button type="primary" size="large" @click="$router.push('/publish')">发布你的第一张小卡</el-button>
+        <el-button type="primary" size="large" @click="$router.push('/publish')">发布你的小卡</el-button>
         <el-button type="success" size="large" @click="$router.push('/cart')">查看购物车</el-button>
       </div>
     </section>
 
     <div class="goods-grid">
       <el-card v-for="item in goodsList" :key="item.id" class="goods-card">
-        <el-image
-          :src="item.coverImage || placeholderImage"
-          fit="cover"
-          class="goods-image"
-        >
-          <template #error>
-            <div class="empty-img">暂无图片</div>
-          </template>
-        </el-image>
+       <el-image
+        :src="item.cover_image || placeholderImage"
+        style="width:100%;height:180px;background:#f9f0f6"
+        fit="cover"
+      >
+        <template #error>
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ff6994;">
+            暂无图片
+          </div>
+        </template>
+      </el-image>
         <div class="goods-info">
           <div class="goods-title">{{ item.title }}</div>
           <div class="goods-meta">{{ item.groupName }} · {{ item.idolName }}</div>
@@ -30,7 +32,23 @@
             <el-tag size="small" type="info">{{ item.tradeType }}</el-tag>
           </div>
           <div class="goods-price">¥{{ item.price }}</div>
-          <el-button type="primary" round @click="goDetail(item.id)">立即查看</el-button>
+          <div class="card-bottom">
+            <el-button 
+              type="primary" 
+              size="small"
+              @click="goDetail(item.id)"
+            >
+              立即查看
+            </el-button>
+            <el-button 
+              type="success" 
+              size="small"
+              style="margin-left:8px"
+              @click="addCart(item.id)"
+            >
+              加入购物车
+            </el-button>
+          </div>
         </div>
       </el-card>
     </div>
@@ -47,10 +65,35 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 const router = useRouter();
 const goodsList = ref([]);
 const placeholderImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23fff0f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23f06292' font-size='18'%3E暂无图片%3C/text%3E%3C/svg%3E";
+
+const addCart = async (goodsId) => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    ElMessage.error('请先登录');
+    router.push('/login');
+    return;
+  }
+  try {
+    const res = await axios.post('/api/cart/add', { goodsId, quantity: 1 });
+    if (res.data.code === 0) {
+      ElMessage.success('成功加入购物车！');
+    } else {
+      ElMessage.warning(res.data.message || '加购失败');
+    }
+  } catch (err) {
+    if (err.response?.status === 401) {
+      ElMessage.error('请先登录');
+      router.push('/login');
+    } else {
+      ElMessage.error('加入购物车失败');
+    }
+  }
+};
 
 const loadGoods = async () => {
   try {
@@ -155,6 +198,12 @@ onMounted(loadGoods);
   color: #ff4d73;
   font-weight: 700;
   margin-bottom: 16px;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }
 
 .empty-state {

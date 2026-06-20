@@ -34,8 +34,11 @@
             <span>商品状态：{{ goodsInfo.status === 1 ? '上架中' : '已下架' }}</span>
           </div>
           <div class="actions">
-            <el-button type="primary" round @click="addToCart">加入购物车</el-button>
-            <el-button type="danger" round @click="buyNow">立即购买</el-button>
+            <div v-if="goodsInfo.status === 1">
+              <el-button type="success" size="large" @click="addToCart">加入购物车</el-button>
+              <el-button type="danger" size="large" @click="buyNow">立即购买</el-button>
+            </div>
+            <span v-else style="color:red;">商品已下架，无法加购</span>
           </div>
         </div>
       </div>

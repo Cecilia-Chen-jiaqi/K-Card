@@ -13,15 +13,15 @@ public class KpopGoodsDetailServiceImpl extends ServiceImpl<KpopGoodsDetailMappe
         return lambdaQuery().eq(KpopGoodsDetail::getGoodsId, goodsId).one();
     }
 
-    @Override
-    public boolean saveOrUpdate(KpopGoodsDetail detail) {
-        if (detail == null || detail.getGoodsId() == null) {
-            return false;
-        }
-        KpopGoodsDetail existing = findByGoodsId(detail.getGoodsId());
-        if (existing != null) {
-            detail.setId(existing.getId());
-        }
-        return saveOrUpdate(detail);
+   @Override
+public boolean saveOrUpdate(KpopGoodsDetail detail) {
+    if (detail == null || detail.getGoodsId() == null) {
+        return false;
     }
+    KpopGoodsDetail existing = findByGoodsId(detail.getGoodsId());
+    if (existing != null) {
+        detail.setId(existing.getId());
+    }
+    return super.saveOrUpdate(detail);
+}
 }

@@ -21,6 +21,10 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         save(cart);
         return cart;
     }
+    @Override
+    public boolean saveOrUpdate(Cart cart) {
+        return super.saveOrUpdate(cart);
+    }
 
     @Override
     public Cart getById(Long id) {
