@@ -9,6 +9,8 @@ import java.util.Date;
 public class GoodsDetailDto extends Goods {
     private String sellerUsername;
     private String sellerCampus;
+    private Boolean favorited;
+    private Boolean followingSeller;
     private String cardBundle;
     private String exchangeInfo;
     private Date reserveDeadline;

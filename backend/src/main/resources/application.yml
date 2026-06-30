@@ -10,8 +10,12 @@ spring:
   jackson:
     serialization:
       indent_output: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   resources:
-    static-locations: file:D:/upload/,classpath:/static/
+    static-locations: classpath:/static/
   mvc:
     static-path-pattern: /upload/**
 
@@ -21,7 +25,7 @@ jwt:
 
 upload:
   image-max-size: 5242880
-  path: D:/upload/
+  path: ./upload/
   prefix: /upload/
 
 mybatis-plus:
@@ -30,11 +34,17 @@ mybatis-plus:
     map-underscore-to-camel-case: true
 
 alipay:
-  gateway: https://openapi.alipaydev.com/gateway.do
+  gateway: https://openapi-sandbox.dl.alipaydev.com/gateway.do
   app-id: 9021000164670856
-  private-key: |-
+  private-key: |
     MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDpfTq/p3kFy2RwQWEA5ijwuXXQtO53spPew3ki5oBwx32B7LZPAkQkMy7ordPm6lc0D4h309NPyqVycRgOXOB8HO9IUST9Fj88zOlGh76cgG+ztqRdDi1DLRyUswJ0JSX7ffEAqqjvgt/tvIbKz+ejXNEZ53vsgBGmdxB6mRHxq6nGc7biFC8NyawyuXjLEJVsF0ZQcOVi+97mhM4PmYdfqK0GY7k3ReZn3npbWfiNr81V4NVvdBDLGIFpa1XzhJhalKPyzpasBcbIRQ7C5G25ZH8Brv9oK+NRETHKR8cSMqRxlcLVP2YSNXd10zqYGP8VIHnrGoOaOlpAwiTF6BGhAgMBAAECggEASyJKIlwg3JV7p4fSUDjAGd6EI/nk9s2XOcrLE0j7Mc9v+rwSWlBPXxq9UJCHLLph/1W0Q2L9j6KVJMNxy0Vl02p4MVwzO+HJzaXetxx9YN0PlNQEBhHGzOQaW1tTQc6mb0wynlVMcW464sSU13SZhH8cpmpP/WWkyF1uBxV0qcBHKiCOJCOj6J8HbULGqDMXmDC8EdUSvlKMTsvHgi7axyxGvQBH6uysSbnXryAeFQ7cL0PUbtmwHpWRNs/Wc83sqyfvSpV7Adst3gzl7zH8AWu8YmA5ClDK76n4iWSGRSDIRGxysAjkI7/CJsWSxThT/e1A4lfIdkiqRA1o5FjLlQKBgQD/2SUNfzA9cB9MPfnYA+duSGwL617M1HG7a8KmoJZ9nNTSLcbIViza0xeFWWhlKEoEk4+t6qS9t620gNs6VBv4+h33cnoAFtG7D43y+lrt74GzH7Lq8WXdfMwbmtKIUynIMqmA81RzIk5LwStAQK/jxgmOaNK1zIoSqSR7KvJMowKBgQDpoLBp/OOHzxWS8tcbHYuN6sTsW7Wy4zrmRTZL7IyfU2DjHyDhi5I6AhNOfBnjD/nXTNK64/dcAcI6aPgNG9dfkrY6dgC8nD3en0yKSKdGFj5Z8chHE8HqrkadHlEitZPiQ6X+y93DjPu5KuGrCigWY7kQMq1AjYtezjWCpFjo6wKBgQDkylwWG70Z0+BJH8sC30rgFid46TxXU0t5XL4un8C0B8FRStpOYLGv5cFM4E042LSILyT3U7OKbG0L04c4O+rf1Vti4p4y4jUfYKOBu1wBFoMXmas36jM7w9QKg4LtoeDlRFjMFc1ZQD5gBBgXV0FzIK9/CEIVjRmT4mnbMuaGnQKBgGmmjkDP6QEwh9wVT2tmuAZspbMRYiDMm4UoxX4eMhWW+hibqh31JSJwb9StUHObdOuFRULY9rK35OLPN2WOMp541UmotXqV2XDEbzOV2XdbdcTtDxn9eFMtjqdc32on3QGUgAuym83kAq3hE35qsGg3nqgRksG/gMhVzmMO+VoTAoGAVc6aEZZpgdPKm+JEt3UF5j+rQjhApTdL4lMhmpKEgj8FkUtrserS4dHLlzZpYO+H2nR1/XPkwq3tJDghcZYpklr2cOrrwAYbb2fIAe30OpY7/jMJJgqOWNnOxSMMSe0jo00P2T7YGFs5+uS1gGnEnWvKPX0X7UpiDz5WuNLPpVA=
-  public-key: |-
+  public-key: |
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwT/VvNZbHRDo1Sek7hITk3O/TcJe4yztUqurv2VqQ4gCFbtUuNm6dYdBoBXaPdfoTAWau2//3PYVxRmqG4e0beKIGeQngUnwsR6L5W4qwRdEc1Kne05avQgwMWiD5i83zYdzEY3ub279Z5e0hHBs4IjkfHY5Y9lGab1163jh5/x+1dsV60IVGl8xAyyIBUY8QfRiM1uiiTRGHebD5bx6x5bu8uv6zcAo0IHvYXOTzqZ4Jgis//SL3hWTebhEIvoW9O54S7ADc8xaEWfoMIMSGWsHt7EoUZoGH1Kw/IaxyDN3KF1zVjeQNWOVFnfNxhV/H1A2a41t3b7mX98RgMYecQIDAQAB
-  notify-url: https://escapist-asparagus-failing.ngrok-free.dev/api/pay/notify
-  return-url: http://localhost:8080/pay/success
+  notify-url: http://localhost:8080/api/pay/notify
+  return-url: http://localhost:3000/pay-success
+  omit-notify-in-sandbox: true
+  # 沙箱不传 return_url，手机支付完成后在电脑端点「我已支付」同步即可
+  omit-return-url-in-sandbox: true
+  # sandbox-return-fallback: https://escapist-asparagus-failing.ngrok-free.dev/api/pay/return
+  # page.pay 传 notify_url 时沙箱会预探测回调，易导致跳转失败；支付后请用 sync-status 同步
+  # sandbox-notify-fallback: https://escapist-asparagus-failing.ngrok-free.dev/api/pay/notify

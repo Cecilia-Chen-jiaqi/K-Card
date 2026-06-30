@@ -16,11 +16,17 @@ public class Orders {
     private Long buyerId;
     private Long sellerId;
     private Long goodsId;
+    private Long addressId;
     private Integer quantity;
     private BigDecimal amount;
     private Integer payType;
     private Integer status;
     private Integer isReserved;
+    private Integer itemCount;
+    private String expressCompany;
+    private String trackingNo;
+    private String logisticsNote;
+    private Date shippedAt;
     private Date createdAt;
     private Date updatedAt;
     private Date closedAt;

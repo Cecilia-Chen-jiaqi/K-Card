@@ -18,6 +18,8 @@ public class GoodsCreateDto {
     private Integer deliveryMode;
     private String coverImage;
     private String defectImages;
+    private String cardType;
+    private String albumEra;
     private String cardBundle;
     private String exchangeInfo;
     private String reserveDeadline;

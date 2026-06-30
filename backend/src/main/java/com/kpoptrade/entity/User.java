@@ -20,6 +20,8 @@ public class User {
     private String campus;
     private String intro;
     private Integer role;
+    /** 1=正常 0=禁用 */
+    private Integer accountStatus;
     private Date createdAt;
     private Date updatedAt;
 }

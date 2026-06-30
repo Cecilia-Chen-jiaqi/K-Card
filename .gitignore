@@ -1,0 +1,25 @@
+# Build outputs
+backend/target/
+frontend/dist/
+frontend/node_modules/
+
+# User uploads (keep directory only)
+backend/upload/*
+!backend/upload/.gitkeep
+
+# IDE / OS
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Logs
+*.log
+
+# Local overrides
+**/application-local.yml

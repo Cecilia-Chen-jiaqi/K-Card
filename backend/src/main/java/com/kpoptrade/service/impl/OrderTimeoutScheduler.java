@@ -1,7 +1,6 @@
 package com.kpoptrade.service.impl;
 
 import com.kpoptrade.entity.Orders;
-import com.kpoptrade.service.GoodsService;
 import com.kpoptrade.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,8 +13,6 @@ import java.util.List;
 public class OrderTimeoutScheduler {
     @Autowired
     private OrdersService ordersService;
-    @Autowired
-    private GoodsService goodsService;
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void closeExpiredOrders() {
@@ -25,7 +22,6 @@ public class OrderTimeoutScheduler {
             order.setClosedAt(new Date());
             order.setUpdatedAt(new Date());
             ordersService.updateOrder(order);
-            goodsService.increaseStock(order.getGoodsId(), order.getQuantity());
         }
     }
 }

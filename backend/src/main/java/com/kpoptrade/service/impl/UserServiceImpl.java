@@ -1,6 +1,7 @@
 package com.kpoptrade.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.kpoptrade.constant.AccountStatus;
 import com.kpoptrade.entity.User;
 import com.kpoptrade.mapper.UserMapper;
 import com.kpoptrade.service.UserService;
@@ -30,6 +31,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(0);
+        user.setAccountStatus(AccountStatus.ACTIVE);
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
         save(user);
@@ -50,5 +52,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getById(Long id) {
         return super.getById(id);
+    }
+
+    @Override
+    @Transactional
+    public User updateProfile(Long userId, User profile) {
+        User user = getById(userId);
+        if (user == null) {
+            return null;
+        }
+        if (profile.getNickname() != null) {
+            user.setNickname(profile.getNickname().trim());
+        }
+        if (profile.getCampus() != null && !profile.getCampus().trim().isEmpty()) {
+            user.setCampus(profile.getCampus().trim());
+        }
+        if (profile.getIntro() != null) {
+            user.setIntro(profile.getIntro().trim());
+        }
+        if (profile.getAvatar() != null && !profile.getAvatar().trim().isEmpty()) {
+            user.setAvatar(profile.getAvatar().trim());
+        }
+        user.setUpdatedAt(new Date());
+        updateById(user);
+        user.setPassword(null);
+        return user;
     }
 }

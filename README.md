@@ -1,9 +1,19 @@
 # K-CARD KPOP小卡交易平台
 
+> 版本 v1.5.0 · [系统说明书](docs/K-CARD系统说明书.md)
+
 ## 目录
 - `sql/kpop_trade_schema.sql`：MySQL 5.7 完整建表 SQL
 - `backend/`：Spring Boot 后端源码
-- `frontend/`：Vue3 + Vite 前端源码
+- `frontend/`：Vue3 + Vite + Element Plus 前端源码
+- `docs/`：系统说明书（Markdown / Word）
+- `scripts/`：测试与文档导出脚本
+
+## 主要功能
+- 小卡发布、搜索、购物车、合并订单、支付宝沙箱支付与退款
+- 收藏商品、关注卖家、收货地址与物流
+- 商品审核、管理后台（数据统计 ECharts、用户管理）
+- 校园面交专区、换卡专区
 
 ## 环境要求
 - JDK 1.8
@@ -41,6 +51,10 @@
    npm run dev
    ```
 4. 打开 `http://localhost:3000`
+
+## 管理后台
+- 默认管理员：首次启动自动创建 `admin` / `admin123`（请尽快修改密码）
+- 访问：`http://localhost:3000/admin`
 
 ## ngrok 使用
 1. 在本地安装 ngrok

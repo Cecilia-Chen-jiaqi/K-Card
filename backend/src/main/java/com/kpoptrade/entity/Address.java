@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 @TableName("address")
 public class Address {
@@ -17,4 +19,6 @@ public class Address {
     private String district;
     private String detail;
     private Integer isDefault;
+    private Date createdAt;
+    private Date updatedAt;
 }

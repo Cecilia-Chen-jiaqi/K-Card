@@ -7,4 +7,5 @@ public interface UserService {
     User findByUsername(String username);
     User findByPhone(String phone);
     User getById(Long id);
+    User updateProfile(Long userId, User profile);
 }

@@ -16,7 +16,11 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
     private static final List<String> PUBLIC_PATHS = Arrays.asList(
             "/api/auth/login",
             "/api/auth/register",
-            "/api/pay/success"
+            "/api/pay/success",
+            "/api/pay/return",
+            "/api/pay/notify",
+            "/api/meta/kpop",
+            "/api/meta/express"
     );
 
     public JwtAuthInterceptor(JwtUtil jwtUtil) {
@@ -52,13 +56,32 @@ public class JwtAuthInterceptor implements HandlerInterceptor {
         if (PUBLIC_PATHS.contains(uri)) {
             return true;
         }
-        if (uri.startsWith("/api/goods") && "GET".equalsIgnoreCase(method)) {
+        if ("GET".equalsIgnoreCase(method) && isPublicGoodsRead(uri)) {
             return true;
         }
         if (uri.startsWith("/api/upload") && "POST".equalsIgnoreCase(method)) {
             return true;
         }
+        if (uri.startsWith("/api/pay/sync-status") && "GET".equalsIgnoreCase(method)) {
+            return true;
+        }
         return uri.startsWith("/api/auth/");
+    }
+
+    /** 仅公开商品浏览类接口，/my 等需登录 */
+    private boolean isPublicGoodsRead(String uri) {
+        if (!uri.startsWith("/api/goods")) {
+            return false;
+        }
+        if ("/api/goods/my".equals(uri)) {
+            return false;
+        }
+        return uri.equals("/api/goods/list")
+                || uri.startsWith("/api/goods/search")
+                || uri.startsWith("/api/goods/detail")
+                || uri.equals("/api/goods/campus")
+                || uri.equals("/api/goods/exchange")
+                || uri.matches("/api/goods/\\d+");
     }
 
     private void reject(HttpServletResponse response, int status, String message) throws IOException {

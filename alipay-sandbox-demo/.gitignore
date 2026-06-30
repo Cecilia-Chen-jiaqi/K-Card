@@ -1,0 +1,9 @@
+# 本地配置文件（含密钥，勿提交到 Git）
+config.py
+private_key.txt
+*.pem
+
+# Python
+venv/
+__pycache__/
+*.pyc
